@@ -1,42 +1,40 @@
 
-def evaluate(x)
-	if x % 100 == 0
-		if x % 400 == 0
-			true
-		else
-			false
-		end
-	elsif x % 4 == 0
-		true
-	else
-		false
-	end
+def leap_year?(year)
+	multiple?(year, 100) ? multiple?(year, 400) : multiple?(year, 4)
 end
 
-def amount(a)
-	('%.1f' % ((a / 31536000.0) * 100)) + '%'
+def multiple?(year, divisor)
+	year % divisor == 0
 end
 
-def convert(x)
-	a, b = x.split(":")
-	c, d = b.split(" ")
-	e = ""
+def percent_year(seconds)
+	format_as_percentage((seconds / SECONDS_IN_A_YEAR) * 100)
+end
 
-	if d.downcase != 'am'
-		if a.to_i == 12
-			e = a + ":" + c
+SECONDS_IN_A_YEAR = 60 * 60 * 24 * 365 * 1.0 # 31536000.0
+
+def format_as_percentage(n)
+	'%.1f' % n + '%'
+end
+
+def standard_to_military(time)
+	hours, b = time.split(":")
+	minutes, am_or_pm = b.split(" ")
+
+	if am_or_pm.downcase == 'pm'
+		if hours == "12"
+			return ("12:00")
 		else
-			e = (a.to_i + 12).to_s + ":" + c
+			return((hours.to_i + 12).to_s + ":" + minutes)
 		end
-	elsif d.downcase != 'pm'
-		if a.to_i == 12
-			e = (a.to_i - 12).to_s + ":" + c
+	elsif am_or_pm.downcase == 'am'
+		if hours == "12"
+			return ("0:00")
 		else
-			e = a + ":" + c
+			return(hours + ":" + minutes)
 		end
 	end
 
-	return e
 end
 
 def convert2(x)
