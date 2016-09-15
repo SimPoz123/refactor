@@ -21,20 +21,20 @@ def standard_to_military(time)
 	hours, b = time.split(":")
 	minutes, am_or_pm = b.split(" ")
 
-	if am_or_pm.downcase == 'pm'
-		if hours == "12"
-			return ("12:00")
-		else
-			return((hours.to_i + 12).to_s + ":" + minutes)
-		end
-	elsif am_or_pm.downcase == 'am'
-		if hours == "12"
-			return ("0:00")
-		else
-			return(hours + ":" + minutes)
-		end
+	if hours == "12"
+		return am_or_pm == "am" ? "0:00" : ("12:00")
 	end
 
+	format_as_time(hours, minutes, am_or_pm)
+
+end
+
+def format_as_time(hours, minutes, am_or_pm)
+	if am_or_pm.downcase == "pm"
+		(hours.to_i + 12).to_s + ":" + minutes
+	else
+		hours + ":" + minutes
+	end
 end
 
 def convert2(x)
