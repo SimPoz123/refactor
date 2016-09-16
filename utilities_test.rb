@@ -67,6 +67,60 @@ describe 'utilities' do
 
   end
 
+  describe 'military_to_standard' do
 
+    it 'works in am' do
+      military_to_standard("7:34").must_equal("7:34 am")
+    end
+
+    it 'works in pm' do
+      military_to_standard("15:12").must_equal("3:12 pm")
+    end
+
+    it 'works at noon' do
+      military_to_standard("12:00").must_equal("12:00 pm")
+    end
+
+    it 'works at midnight' do
+      military_to_standard("0:00").must_equal("12:00 am")
+    end
+
+  end
+
+  describe 'curfew?' do
+
+    it 'is true in the am' do
+      curfew?("1:00 am", true).must_equal(true)
+      curfew?("6:00 am", true).must_equal(true)
+      curfew?("11:00 am", true).must_equal(true)
+    end
+
+    it 'is true before 8 pm' do
+      curfew?("2:00 pm", true).must_equal(true)
+      curfew?("6:00 pm", true).must_equal(true)\
+    end
+
+    it 'is false at 8 pm on a weekday' do
+      curfew?("8:00 pm", true).must_equal(false)
+    end
+
+    it 'is false after 8 on a weekday' do
+      curfew?("9:00 pm", true).must_equal(false)
+    end
+
+    it 'is true between 8 and 10 pm on a weekend' do
+      curfew?("9:00 pm", false).must_equal(true)
+    end
+
+    it 'is false at 10 pm on a weekend' do
+      curfew?("10:00 pm", false).must_equal(false)
+    end
+
+    it 'is false after 10 pm' do
+      curfew?("11:00 pm", false).must_equal(false)
+      curfew?("11:00 pm", true).must_equal(false)
+    end
+
+  end
 
 end

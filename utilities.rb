@@ -7,6 +7,7 @@ def multiple?(year, divisor)
 	year % divisor == 0
 end
 
+
 def percent_year(seconds)
 	format_as_percentage((seconds / SECONDS_IN_A_YEAR) * 100)
 end
@@ -17,6 +18,7 @@ def format_as_percentage(n)
 	'%.1f' % n + '%'
 end
 
+
 def standard_to_military(time)
 	hours, b = time.split(":")
 	minutes, am_or_pm = b.split(" ")
@@ -25,39 +27,40 @@ def standard_to_military(time)
 		return am_or_pm == "am" ? "0:00" : ("12:00")
 	end
 
-	format_as_time(hours, minutes, am_or_pm)
+	format_as_military_time(hours, minutes, am_or_pm)
 
 end
 
-def format_as_time(hours, minutes, am_or_pm)
-	if am_or_pm.downcase == "pm"
-		(hours.to_i + 12).to_s + ":" + minutes
-	else
-		hours + ":" + minutes
-	end
+def format_as_military_time(hours, minutes, am_or_pm)
+	am_or_pm.downcase == "am" ? hours + ":" + minutes : (hours.to_i + 12).to_s + ":" + minutes
 end
 
-def convert2(x)
-	a, b = x.split(":")
-	c = ""
 
-	if a.to_i < 12
-		c = a + b + " am"
-	else
-		c = a + b + " pm"
+def military_to_standard(time)
+	hours, minutes = time.split(":")
+
+	if hours == "0" || hours == "12"
+		return hours == "0" ? "12:00 am" : "12:00 pm"
 	end
 
-	return c
+	hours.to_i < 12 ? format_as_standard_time(hours, minutes, "am") : format_as_standard_time((hours.to_i - 12).to_s, minutes, "pm")
+
 end
 
-def okay(a, b)
-	c = false
-	if (a.split(":")[0].to_i >= 8 && b || a.split(":")[0].to_i >= 10 && !b) && a.split(":")[1].split(" ")[1] == 'pm'
-		c = false
-	else
-		c = true
+def format_as_standard_time(hours, minutes, am_or_pm)
+		hours + ":" + minutes + " " + am_or_pm
+end
+
+
+def curfew?(time, is_weekday)
+	hours, minutes = time.split(":")
+	minutes, am_or_pm = minutes.split(" ")
+
+	if am_or_pm == "pm"
+		return !((hours.to_i >= 8 && is_weekday) || (hours.to_i >= 10 && !is_weekday))
 	end
-	return c
+
+	true
 end
 
 def span(a, b)
